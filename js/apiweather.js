@@ -14,7 +14,7 @@ $(document).ready(function() {
     });
 
         $.ajax({
-            url: "./js/api.json",
+            url: "./api.json",
             type: "GET",
             dataType: "json",
             success: function(response) {

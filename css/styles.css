@@ -1,0 +1,179 @@
+html {
+    font-size: 62.5%; 
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Fira Sans', sans-serif;
+}
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.container {
+    height: 94vh;
+    overflow: hidden;
+    margin: 3vh;
+    background-color: #012840;
+    background-image: url(../assets/clouds.jpg);
+    background-position: center; 
+    background-repeat: no-repeat; 
+    background-size: cover;
+}
+
+/* heading and search boxes */
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    font-family: "Nanum Myeongjo", serif;
+}
+
+.heading {
+    color: #fff;
+    background-image: linear-gradient(to left, rgba(0, 0, 0, .4), rgba(0, 0, 0, .3));
+    padding: 2rem 5rem;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+select {
+    width: 20rem;
+    font-family: inherit;
+    font-size: 1.5rem;
+}
+
+/* display weather, severe weather & wind warnings */
+#display {
+   height: 94vh; 
+    color: #fff;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.alert, .warning {
+    height: 45rem;
+    width: 25rem;
+    border-radius: 10px;
+}
+
+.result {
+    height: 55rem;
+    width: 35rem;
+    background: linear-gradient(45deg, rgba(6, 105, 191, .6), rgba(94, 186, 242, .9));
+}
+
+.card_top {
+    height: 65%;
+    padding: 3rem;
+    text-align: center;
+}
+
+.card_top h2 {
+    font-size: 3rem;
+}
+
+.card_top h3 {
+    font-size: 7rem;
+    color: #F26D6D;
+    font-weight: 700;
+}
+
+.card_top img {
+    width: 10rem;
+    height: 10rem;
+}
+
+.card_top p {
+    font-size: 2.5rem;
+}
+
+.card_bottom {
+    height: 35%;
+    padding: 1rem; 
+}
+
+.card_bottom p {
+   padding: 1rem;
+   font-size: 1.8rem;
+   text-transform: capitalize;
+}
+
+.card_bottom p {
+    border-top: 1px solid rgba(211, 211, 211, .3);
+}
+
+.card_bottom span {
+    color: lightgrey;
+    padding-right: .5rem;
+}
+
+.warm {
+    background: linear-gradient(160deg, rgba(242, 109, 109, .9), rgba(242, 109, 109, .6));
+}
+
+.cold {
+    background: linear-gradient(160deg, rgba(143, 151, 156, 0.7), rgba(216, 217, 197, .5));
+}
+
+.wind {
+    background: linear-gradient(160deg, rgba(38, 140, 140, .8), rgba(111, 176, 176, .6));
+}
+
+.warm, .cold, .wind {
+    height: 45rem;
+    width: 25rem;
+    border-radius: 10px;
+    padding: 5rem;
+}
+
+.content h2 {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 4rem;
+    padding-bottom: 2rem;
+}
+
+.content span {
+    font-weight: 700;
+}
+
+.content li {
+    list-style: none;
+    font-size: 1.5rem;
+    padding: 1rem 0;
+}
+
+/* error message */
+#error {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#error h2 {
+    font-size: 4rem;
+    text-align: center;
+    padding: 1rem;
+    color: #F26D6D;
+    text-transform: capitalize;
+}
+
+#error p {
+    font-size: 1.8rem;
+}

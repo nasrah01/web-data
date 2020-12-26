@@ -1,6 +1,9 @@
 
 
 $(document).ready(function() { 
+
+    const background = document.querySelector('.container');
+
     
     $("#country").change(function() {
         if($("#country :selected").val() != "" ) {
@@ -10,6 +13,7 @@ $(document).ready(function() {
         } else {
             $("#city").addClass("hidden");
             $("#display").html("");
+            background.style.backgroundImage = `url('./assets/default.jpeg')`;
         }
     });
 
@@ -32,25 +36,57 @@ $(document).ready(function() {
                             type: "GET",
                             dataType: "json",
                             success: function(data) {
+                                console.log(data);
                                 $("#display").html("");
                                 const celsius  = Math.round(data.main.temp);
                                 const fahrenheit = Math.round((data.main.temp * 9/5) + 32);
+                                const feelsLike = Math.round(data.main.feels_like);
+                                const sunrise =  convertHM(data.sys.sunrise);
+                                const sunset =  convertHM(data.sys.sunset);
                                 const speedMph = Math.round(data.wind.speed * 2.237);
                                 const speedKmh = Math.round(data.wind.speed * 3.6);
                                 const direction = typeof data.wind.deg == "undefined" ? "Currently Unavailable" : data.wind.deg + "&#176; | " + windDir(data.wind.deg);
+                                const extemeTemp = severeTemp(celsius) !== "" ? `<p>${severeTemp(celsius)}</p>` :  `<p><span>Feels like:</span> ${feelsLike}&#8451;</p>`;
+                                const extemeWind = severeWind(speedMph) !== "" ? `<p>${severeWind(speedMph)}</p>` : " ";
+
+                                const timeOfDay = data.weather[0].icon;
+                                const letter = timeOfDay.charAt(timeOfDay.length -1);
+
+                                const backgroundImg = () => {
+                                    if(letter === 'd') {
+                                    background.style.backgroundImage = `url('./assets/weather.jpg')`;
+                                    } else {
+                                        background.style.backgroundImage = `url('./assets/night.jpg')`;
+                                    }
+                                };
+
+                                backgroundImg();
+
             
                                 currentCity = `
-                                <div class="alert">${severeTemp(celsius)}</div>
                                 <div class="result">
-                                <div class="card_top"><h2>${data.name}</h2>
-                                <img src="${imgSrc}${data.weather[0].icon}@2x.png" alt="weather icon"/>
-                                <h3>${celsius}&#8451;</h3><p>${fahrenheit}&#8457;</p></div>
-                                <div class="card_bottom"><p><span>Date:</span> ${getDate(data.dt)}</p>
-                                <p><span>Condition:</span> ${data.weather[0].description}</p>
-                                <p><span>Wind Speed:</span> ${speedMph}mph | ${speedKmh}kmh</p>
-                                <p><span>Wind Direction:</span> ${direction}</p></div>
-                                </div>
-                                <div class="warning">${severeWind(speedMph)}</div>`;
+                                    <div class="card__top">
+                                        <h2>${data.name}</h2>
+                                        <h4>${getDate(data.dt)}</h4>
+                                        <div class="top__info">
+                                        <i class="owf owf-${data.weather[0].id}"></i>
+                                        <h3>${celsius}&#8451;</h3>
+                                        <p>${fahrenheit}&#8457;</p>
+                                        </div>
+                                    </div>
+                                    <div class="card__bottom">
+                                        <div class="bottom__info">
+                                        <p><span>Condition:</span> ${data.weather[0].main}</p>
+                                        ${extemeTemp}
+                                        ${extemeWind}
+                                        <p><span>Wind Speed:</span> ${speedMph}mph | ${speedKmh}kmh</p>
+                                        <p><span>Wind Direction:</span> ${direction}</p>
+                                        <p><span>Sunrise:</span> ${sunrise}</p>
+                                        <p><span>Sunset:</span> ${sunset}</p>
+                                        </div>
+                                    </div>
+
+                                </div>`;
                                 $("#display").append(currentCity);
                             },
                             error: function(xhr, error) {
@@ -88,14 +124,10 @@ $(document).ready(function() {
             
                 const severeTemp = temperature => {
                     let warning;
-                    if(temperature > 35) {
-                        warning =  `<div class="warm content"><h2>Warning <span>Hot</span> Weather</h2>
-                        <ul><li>&#9728; Stay hydrated and rest often</li>
-                        <li>&#9728; Stay out of direct sun</li></ul></div>`;
-                    } else if(temperature < -5) {
-                        warning = `<div class="cold content"><h2>Warning <span>Cold</span> Weather</h2>
-                        <ul><li>&#10052; Ice on road and pavement</li>
-                        <li>&#10052; Wrap up and wear layers</li></ul></div>`;
+                    if(temperature >= 35) {
+                        warning =  `Warning heat wave`;
+                    } else if(temperature <= -1) {
+                        warning = `Warning severe cold weather`;
                     } else {
                         warning = "";
                     }
@@ -105,13 +137,23 @@ $(document).ready(function() {
                 const severeWind = speed => {
                     let highWind;
                     if(speed > 50) {
-                        highWind = `<div class="wind content"><h2>Warning <span>High</span> Winds</h2>
-                        <ul><li>&#10148; During high winds take cover</li>
-                        <li>&#10148; Watch for flying debris when walking and driving</li></ul><div>`;  
+                        highWind = `Warning high winds`;  
                     } else {
                         highWind = "";
                     }
                     return highWind;
+                };
+
+                // use when using different backgrounds for weather conditions
+                const backdrop = condition => {
+                    const img = condition.toLowerCase();
+                    return img;
+                };
+
+                const convertHM = value => {
+                    let date = new Date(value * 1000);
+                    let timeStr = date.toLocaleTimeString().match(/\d{2}:\d{2}|[AMP]+/g).join(' ');
+                    return timeStr;
                 };
                 
             },
